@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 const ProductList = ({ mode }) => {
   const [products, setProducts] = useState([]);
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,7 +53,10 @@ console.log(products);
                   ₹{product.price}
                 </p>
 
-                <button className="bg-green-600 text-white px-4 py-2 rounded mt-3">
+                <button 
+                  className="bg-green-600 text-white px-4 py-2 rounded mt-3"
+                  onClick={() => addToCart(product)}
+                >
                   Add To Cart
                 </button>
               </div>
