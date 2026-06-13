@@ -9,11 +9,11 @@ const Footer = ({ mode }) => {
 
         {/* Logo Section */}
         <div>
-          <h2 className="text-xxl font-bold mb-2">
+          <h2 className="text-3xl font-bold mb-2">
             🌱 AgriMart
           </h2>
 
-          <p className="text-sm text-green-100">
+          <p className="text-lg text-green-100">
             Connecting Farmers, Retail Customers &
             Businesses Across India.
           </p>
@@ -21,11 +21,11 @@ const Footer = ({ mode }) => {
 
         {/* Quick Links */}
         <div>
-          <h3 className="font-semibold text-base mb-2">
+          <h2 className=" text-2xl font-semibold text-base  mb-2">
             Quick Links
-          </h3>
+          </h2>
 
-          <ul className="space-y-1 text-sm">
+          <ul className="space-y-1 text-lg">
 
             <li>
               <Link to="/">Home</Link>
@@ -48,9 +48,9 @@ const Footer = ({ mode }) => {
 
         {/* Contact Info */}
         <div>
-          <h3 className="font-semibold text-base mb-2">
+          <h2 className="font-semibold text-2xl text-base mb-2">
             Contact Info
-          </h3>
+          </h2>
 
           <div className="space-y-1 text-sm text-green-100">
             <p>📍 Jodhpur, Rajasthan</p>
