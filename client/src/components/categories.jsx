@@ -1,45 +1,63 @@
 const Categories = ({ mode }) => {
   const isWholesale = mode === "B2B";
 
-  const categories = [
-    {
-      name: "Seeds",
-      icon: "🌾",
-    },
-    {
-      name: "Fertilizers",
-      icon: "🧪",
-    },
-    {
-      name: "Farming Tools",
-      icon: "🚜",
-    },
-    {
-      name: "Organic Products",
-      icon: "🌱",
-    },
-  ];
+  const categories = isWholesale
+    ? [
+        {
+          name: "Bulk Seeds",
+          icon: "🌾",
+        },
+        {
+          name: "Bulk Fertilizers",
+          icon: "🧪",
+        },
+        {
+          name: "Agricultural Machinery",
+          icon: "🚜",
+        },
+        {
+          name: "Wholesale Feed",
+          icon: "🐄",
+        },
+      ]
+    : [
+        {
+          name: "Seeds",
+          icon: "🌾",
+        },
+        {
+          name: "Fertilizers",
+          icon: "🧪",
+        },
+        {
+          name: "Farming Tools",
+          icon: "🚜",
+        },
+        {
+          name: "Organic Products",
+          icon: "🌱",
+        },
+      ];
 
   return (
-    <div className="max-w-7xl mx-auto py-16 px-6">
+    <div className="max-w-7xl mx-auto py-12 px-6">
 
       <h2
-        className={`text-5xl font-extrabold text-center mb-12 ${
+        className={`text-4xl font-extrabold text-center mb-10 ${
           isWholesale ? "text-blue-700" : "text-green-700"
         }`}
       >
         Product Categories
       </h2>
 
-      <div className="grid md:grid-cols-4 gap-8">
+      <div className="grid md:grid-cols-4 gap-6">
 
         {categories.map((category) => (
           <div
             key={category.name}
             className={`
               relative overflow-hidden
-              rounded-3xl p-8 text-center
-              backdrop-blur-md
+              rounded-3xl p-6 text-center
               shadow-xl
               hover:scale-105
               hover:-translate-y-2
@@ -53,9 +71,8 @@ const Categories = ({ mode }) => {
               }
             `}
           >
-            {/* Glow Effect */}
             <div
-              className={`absolute -top-8 -right-8 w-24 h-24 rounded-full blur-2xl opacity-30 ${
+              className={`absolute -top-8 -right-8 w-20 h-20 rounded-full blur-2xl opacity-30 ${
                 isWholesale
                   ? "bg-blue-400"
                   : "bg-green-400"
@@ -64,7 +81,7 @@ const Categories = ({ mode }) => {
 
             <div className="relative z-10">
 
-              <div className="text-5xl mb-4">
+              <div className="text-5xl mb-3">
                 {category.icon}
               </div>
 
@@ -79,6 +96,7 @@ const Categories = ({ mode }) => {
               </h3>
 
             </div>
+
           </div>
         ))}
 

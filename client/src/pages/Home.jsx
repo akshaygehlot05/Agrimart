@@ -159,7 +159,7 @@ const Home = ({ mode }) => {
 
       </section>
 
-      <Categories />
+      <Categories mode={mode} />
 
       <ProductList mode={mode} />
 

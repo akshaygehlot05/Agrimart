@@ -52,7 +52,7 @@ const Footer = ({ mode }) => {
             Contact Info
           </h2>
 
-          <div className="space-y-1 text-sm text-green-100">
+          <div className="space-y-1 text-lg text-green-100">
             <p>📍 Jodhpur, Rajasthan</p>
             <p>📧 support@agrimart.com</p>
             <p>📞 +91 9876543210</p>
@@ -63,7 +63,7 @@ const Footer = ({ mode }) => {
 
       <hr className="my-4 border-green-700" />
 
-      <p className="text-center text-sm text-green-100">
+      <p className="text-center text-lg text-green-100">
         © 2026 AgriMart. All Rights Reserved.
       </p>
 

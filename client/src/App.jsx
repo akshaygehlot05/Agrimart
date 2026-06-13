@@ -53,12 +53,12 @@ function App() {
 
         <Route
           path="/about"
-          element={<About />}
+          element={<About mode={mode} />}
         />
 
         <Route
           path="/contact"
-          element={<Contact />}
+          element={<Contact mode={mode} />}
         />
 
         <Route

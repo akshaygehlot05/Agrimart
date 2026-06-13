@@ -229,12 +229,11 @@ const Admin = () => {
           </button>
 
           <button
-            type="button"
             onClick={() => {
               localStorage.removeItem("admin");
-              window.location.href = "/";
+              window.location.href = "/admin";
             }}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold"
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
           >
             Logout
           </button>
