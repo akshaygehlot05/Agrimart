@@ -4,6 +4,9 @@ import API from "../services/api";
 const Admin = () => {
   const [products, setProducts] = useState([]);
 
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -33,49 +36,13 @@ const Admin = () => {
     });
   };
 
-  <div className="grid md:grid-cols-4 gap-6 mb-10">
-
-  <div className="bg-green-600 text-white p-6 rounded-2xl shadow-xl">
-        <h3 className="text-lg">📦 Total Products</h3>
-        <p className="text-3xl font-bold">
-        {products.length}
-        </p>
-    </div>
-
-    <div className="bg-blue-600 text-white p-6 rounded-2xl shadow-xl">
-        <h3 className="text-lg">🌾 Categories</h3>
-        <p className="text-3xl font-bold">
-        {new Set(products.map(p => p.category)).size}
-        </p>
-    </div>
-
-    <div className="bg-yellow-500 text-white p-6 rounded-2xl shadow-xl">
-        <h3 className="text-lg">📈 In Stock</h3>
-        <p className="text-3xl font-bold">
-        {products.reduce((acc, p) => acc + p.stock, 0)}
-        </p>
-    </div>
-
-    <div className="bg-purple-600 text-white p-6 rounded-2xl shadow-xl">
-        <h3 className="text-lg">💰 Inventory Value</h3>
-        <p className="text-2xl font-bold">
-        ₹
-        {products.reduce(
-            (acc, p) => acc + p.price * p.stock,
-            0
-        )}
-        </p>
-    </div>
-
-    </div>
-
   const addProduct = async (e) => {
     e.preventDefault();
 
     try {
       await API.post("/products", formData);
 
-      alert("Product Added Successfully ✅");
+      alert("✅ Product Added Successfully");
 
       setFormData({
         name: "",
@@ -89,31 +56,92 @@ const Admin = () => {
       fetchProducts();
     } catch (error) {
       console.log(error);
-      alert("Failed to Add Product ❌");
+      alert("❌ Failed To Add Product");
     }
   };
 
   const deleteProduct = async (id) => {
+    if (!window.confirm("Delete this product?")) return;
+
     try {
-     await API.delete(`/products/${id}`);
+      await API.delete(`/products/${id}`);
 
-        alert("Product Deleted");
+      alert("✅ Product Deleted");
 
-        fetchProducts();
-        } catch (error) {
-            console.log(error);
-            alert("Failed to Delete Product");
-        }
-    };
+      fetchProducts();
+    } catch (error) {
+      console.log(error);
+      alert("❌ Failed To Delete Product");
+    }
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    const matchesCategory =
+      categoryFilter === "All"
+        ? true
+        : product.category === categoryFilter;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const categories = [
+    "All",
+    ...new Set(products.map((p) => p.category)),
+  ];
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-5">
+
       <h1 className="text-5xl font-bold text-center text-green-700 mb-10">
-        Admin Dashboard
+        New Admin Dashboard
       </h1>
 
-      {/* Add Product Form */}
+      {/* Dashboard Stats */}
+
+      <div className="grid md:grid-cols-4 gap-6 mb-10">
+
+        <div className="bg-green-600 text-white p-6 rounded-2xl shadow-xl">
+          <h3 className="text-lg">📦 Total Products</h3>
+          <p className="text-3xl font-bold">
+            {products.length}
+          </p>
+        </div>
+
+        <div className="bg-blue-600 text-white p-6 rounded-2xl shadow-xl">
+          <h3 className="text-lg">🌾 Categories</h3>
+          <p className="text-3xl font-bold">
+            {new Set(products.map((p) => p.category)).size}
+          </p>
+        </div>
+
+        <div className="bg-yellow-500 text-white p-6 rounded-2xl shadow-xl">
+          <h3 className="text-lg">📈 Total Stock</h3>
+          <p className="text-3xl font-bold">
+            {products.reduce((acc, p) => acc + p.stock, 0)}
+          </p>
+        </div>
+
+        <div className="bg-purple-600 text-white p-6 rounded-2xl shadow-xl">
+          <h3 className="text-lg">💰 Inventory Value</h3>
+          <p className="text-xl font-bold">
+            ₹
+            {products.reduce(
+              (acc, p) => acc + p.price * p.stock,
+              0
+            )}
+          </p>
+        </div>
+
+      </div>
+
+      {/* Add Product */}
+
       <div className="bg-white shadow-xl rounded-2xl p-8 mb-10">
+
         <h2 className="text-3xl font-bold mb-6">
           Add New Product
         </h2>
@@ -122,6 +150,7 @@ const Admin = () => {
           onSubmit={addProduct}
           className="grid md:grid-cols-2 gap-4"
         >
+
           <input
             type="text"
             name="name"
@@ -132,15 +161,23 @@ const Admin = () => {
             required
           />
 
-          <input
-            type="text"
+          <select
             name="category"
-            placeholder="Category"
             value={formData.category}
             onChange={handleChange}
             className="border p-3 rounded"
             required
-          />
+          >
+            <option value="">Select Category</option>
+            <option value="Seeds">Seeds</option>
+            <option value="Fertilizers">Fertilizers</option>
+            <option value="Plants">Plants</option>
+            <option value="Tools">Tools</option>
+            <option value="Irrigation">Irrigation</option>
+            <option value="Pesticides">Pesticides</option>
+            <option value="Animal Feed">Animal Feed</option>
+            <option value="Farming Equipment">Farming Equipment</option>
+          </select>
 
           <input
             type="number"
@@ -175,46 +212,112 @@ const Admin = () => {
           <textarea
             name="description"
             placeholder="Description"
+            rows="4"
             value={formData.description}
             onChange={handleChange}
             className="border p-3 rounded md:col-span-2"
-            rows="4"
             required
           />
 
+          <div className="md:col-span-2 flex gap-4">
+
           <button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold md:col-span-2"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold"
           >
             Add Product
           </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem("admin");
+              window.location.href = "/";
+            }}
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold"
+          >
+            Logout
+          </button>
+
+        </div>
+
         </form>
       </div>
 
-      {/* Product List */}
+      {/* Filters */}
+
+      <div className="bg-white shadow-xl rounded-2xl p-6 mb-8">
+
+        <div className="grid md:grid-cols-2 gap-4">
+
+          <input
+            type="text"
+            placeholder="🔍 Search Product..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border p-3 rounded-lg"
+          />
+
+          <select
+            value={categoryFilter}
+            onChange={(e) =>
+              setCategoryFilter(e.target.value)
+            }
+            className="border p-3 rounded-lg"
+          >
+            {categories.map((cat) => (
+              <option key={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+
+        </div>
+
+      </div>
+
+      {/* Products Table */}
+
       <div className="bg-white shadow-xl rounded-2xl p-8">
+
         <h2 className="text-3xl font-bold mb-6">
           Manage Products
         </h2>
 
         <div className="overflow-x-auto">
+
           <table className="w-full border">
+
             <thead className="bg-green-600 text-white">
+
               <tr>
+                <th className="p-3">Image</th>
                 <th className="p-3">Product</th>
                 <th className="p-3">Category</th>
                 <th className="p-3">Price</th>
                 <th className="p-3">Stock</th>
                 <th className="p-3">Action</th>
               </tr>
+
             </thead>
 
             <tbody>
-              {products.map((product) => (
+
+              {filteredProducts.map((product) => (
+
                 <tr
                   key={product._id}
                   className="border-b text-center"
                 >
+
+                  <td className="p-3">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-16 h-16 object-cover rounded mx-auto"
+                    />
+                  </td>
+
                   <td className="p-3">
                     {product.name}
                   </td>
@@ -232,19 +335,30 @@ const Admin = () => {
                   </td>
 
                   <td className="p-3">
+
                     <button
-                      onClick={() => deleteProduct(product._id)}
-                      className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold"
+                      onClick={() =>
+                        deleteProduct(product._id)
+                      }
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
                     >
                       Delete
                     </button>
+
                   </td>
+
                 </tr>
+
               ))}
+
             </tbody>
+
           </table>
+
         </div>
+
       </div>
+
     </div>
   );
 };
